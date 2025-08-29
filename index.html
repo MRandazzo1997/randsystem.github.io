@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My GitHub Pages Site</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -161,6 +163,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -171,11 +174,11 @@
             .hero h1 {
                 font-size: 2rem;
             }
-            
+
             .nav-links {
                 gap: 1rem;
             }
-            
+
             .features {
                 grid-template-columns: 1fr;
             }
@@ -230,7 +233,8 @@
             cursor: pointer;
         }
 
-        .upload-area:hover, .upload-area.dragover {
+        .upload-area:hover,
+        .upload-area.dragover {
             border-color: #764ba2;
             background: #e9ecef;
             transform: scale(1.02);
@@ -341,20 +345,71 @@
             color: white;
         }
 
-        .xml-preview {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-top: 1rem;
-            max-height: 300px;
-            overflow-y: auto;
-            font-family: 'Courier New', monospace;
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .chart-container:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .chart-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .chart-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .chart-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
             font-size: 0.9rem;
-            white-space: pre-wrap;
+            transition: all 0.3s ease;
+        }
+
+        .chart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .chart-button.active {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        @media (max-width: 768px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="floating-shapes">
         <div class="shape"></div>
@@ -368,6 +423,7 @@
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
+                <li><a href="#charts">Charts</a></li>
                 <li><a href="#xml-manager">XML Manager</a></li>
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -384,10 +440,116 @@
             </div>
         </section>
 
-        <section class="content" id="xml-manager" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 0;">
+        <section class="content" id="charts"
+            style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%); border-radius: 0;">
             <div class="container">
-                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333;">XML File Manager</h2>
-                
+                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333;">Interactive Charts
+                </h2>
+
+                <div class="chart-controls">
+                    <button class="chart-button active" onclick="switchDataset('sales')">Sales Data</button>
+                    <button class="chart-button" onclick="switchDataset('growth')">Growth Metrics</button>
+                    <button class="chart-button" onclick="switchDataset('performance')">Performance</button>
+                    <button class="chart-button" onclick="animateCharts()">🎯 Animate</button>
+                </div>
+
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <div class="chart-title">Revenue Trends</div>
+                        <canvas id="lineChart" width="400" height="300"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">Market Distribution</div>
+                        <canvas id="pieChart" width="400" height="300"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">Monthly Performance</div>
+                        <canvas id="barChart" width="400" height="300"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">Growth Analytics</div>
+                        <canvas id="doughnutChart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content" id="charts"
+            style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%); border-radius: 0;">
+            <div class="container">
+                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333;">Data Visualization
+                </h2>
+                <p style="text-align: center; margin-bottom: 2rem; color: #666; font-size: 1.1rem;">
+                    Interactive charts powered by Chart.js - switch between datasets to explore different data views
+                </p>
+
+                <div class="chart-controls">
+                    <button class="chart-button active" onclick="switchDataset('sales')">📈 Sales Data</button>
+                    <button class="chart-button" onclick="switchDataset('growth')">📊 Growth Metrics</button>
+                    <button class="chart-button" onclick="switchDataset('performance')">⚡ Performance</button>
+                    <button class="chart-button" onclick="animateCharts()">🎯 Animate All</button>
+                </div>
+
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <div class="chart-title">📈 Trend Analysis</div>
+                        <canvas id="lineChart"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">📊 Distribution Overview</div>
+                        <canvas id="pieChart"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">📋 Comparative Analysis</div>
+                        <canvas id="barChart"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">🎯 Key Metrics</div>
+                        <canvas id="doughnutChart"></canvas>
+                    </div>
+                </div>
+
+                <div
+                    style="margin-top: 3rem; padding: 2rem; background: rgba(255, 255, 255, 0.9); border-radius: 15px; backdrop-filter: blur(10px);">
+                    <h3 style="margin-bottom: 1rem; color: #333;">Chart Features</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎨</div>
+                            <strong>Beautiful Design</strong>
+                            <p style="font-size: 0.9rem; color: #666;">Modern gradients and smooth animations</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📱</div>
+                            <strong>Responsive</strong>
+                            <p style="font-size: 0.9rem; color: #666;">Works perfectly on all devices</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</div>
+                            <strong>Interactive</strong>
+                            <p style="font-size: 0.9rem; color: #666;">Click and switch between data sets</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔄</div>
+                            <strong>Real-time Updates</strong>
+                            <p style="font-size: 0.9rem; color: #666;">Charts update dynamically</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content" id="xml-manager"
+            style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 0;">
+            <div class="container">
+                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333;">XML File Manager
+                </h2>
+
                 <div class="upload-area" onclick="document.getElementById('xmlFileInput').click()">
                     <div style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;">📁</div>
                     <h3 style="margin-bottom: 1rem; color: #333;">Upload XML Files</h3>
@@ -412,12 +574,14 @@
                     <div class="feature">
                         <div class="feature-icon">🚀</div>
                         <h3>Fast & Responsive</h3>
-                        <p>Built with modern web technologies for optimal performance across all devices and screen sizes.</p>
+                        <p>Built with modern web technologies for optimal performance across all devices and screen
+                            sizes.</p>
                     </div>
                     <div class="feature">
                         <div class="feature-icon">🎨</div>
                         <h3>Beautiful Design</h3>
-                        <p>Contemporary visual design with smooth animations and interactive elements that engage users.</p>
+                        <p>Contemporary visual design with smooth animations and interactive elements that engage users.
+                        </p>
                     </div>
                     <div class="feature">
                         <div class="feature-icon">⚡</div>
@@ -461,7 +625,7 @@
                 }
             });
         });
-        
+
         // XML File Management System
         let xmlFiles = []; // Store XML files in memory during session
 
@@ -523,7 +687,7 @@
                         // Validate XML
                         const parser = new DOMParser();
                         const xmlDoc = parser.parseFromString(e.target.result, 'text/xml');
-                        
+
                         // Check for parsing errors
                         const parseError = xmlDoc.getElementsByTagName('parsererror');
                         if (parseError.length > 0) {
@@ -543,7 +707,7 @@
                         // Add to files array
                         xmlFiles.push(xmlFile);
                         renderFilesList();
-                        
+
                         // Show success message
                         showNotification(`✅ ${file.name} uploaded successfully!`, 'success');
                     } catch (error) {
@@ -556,25 +720,25 @@
 
         function renderFilesList() {
             const filesList = document.getElementById('filesList');
-            
+
             if (xmlFiles.length === 0) {
                 filesList.innerHTML = '<p style="color: #666; text-align: center; padding: 2rem;">No XML files uploaded yet</p>';
                 return;
             }
 
             filesList.innerHTML = xmlFiles.map(file => `
-                <div class="xml-file-item">
-                    <div class="file-info">
-                        <div class="file-name">${file.name}</div>
-                        <div class="file-size">${formatFileSize(file.size)} • Uploaded ${formatDate(file.uploadDate)}</div>
-                    </div>
-                    <div class="file-actions">
-                        <button class="action-button" onclick="previewFile('${file.id}')">Preview</button>
-                        <button class="action-button download" onclick="downloadFile('${file.id}')">Download</button>
-                        <button class="action-button delete" onclick="deleteFile('${file.id}')">Delete</button>
-                    </div>
+            <div class="xml-file-item">
+                <div class="file-info">
+                    <div class="file-name">${file.name}</div>
+                    <div class="file-size">${formatFileSize(file.size)} • Uploaded ${formatDate(file.uploadDate)}</div>
                 </div>
-                <div id="preview-${file.id}" style="display: none;"></div>
+                <div class="file-actions">
+                    <button class="action-button" onclick="previewFile('${file.id}')">Preview</button>
+                    <button class="action-button download" onclick="downloadFile('${file.id}')">Download</button>
+                    <button class="action-button delete" onclick="deleteFile('${file.id}')">Delete</button>
+                </div>
+            </div>
+            <div id="preview-${file.id}" style="display: none;"></div>
             `).join('');
         }
 
@@ -593,21 +757,21 @@
         function previewFile(fileId) {
             const file = xmlFiles.find(f => f.id == fileId);
             const previewDiv = document.getElementById(`preview-${fileId}`);
-            
+
             if (previewDiv.style.display === 'none') {
                 // Show preview with syntax highlighting
                 const formattedXml = formatXml(file.content);
                 previewDiv.innerHTML = `
-                    <div class="xml-preview">
-                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
-                            <strong>Preview: ${file.name}</strong>
-                            <button class="action-button" onclick="hidePreview('${fileId}')" style="margin-left: auto;">Hide</button>
-                        </div>
-                        <div style="max-height: 300px; overflow-y: auto; background: white; padding: 1rem; border-radius: 5px;">
-                            <pre><code>${escapeHtml(formattedXml)}</code></pre>
-                        </div>
-                    </div>
-                `;
+            <div class="xml-preview">
+                <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
+                    <strong>Preview: ${file.name}</strong>
+                    <button class="action-button" onclick="hidePreview('${fileId}')" style="margin-left: auto;">Hide</button>
+                </div>
+                <div style="max-height: 300px; overflow-y: auto; background: white; padding: 1rem; border-radius: 5px;">
+                    <pre><code>${escapeHtml(formattedXml)}</code></pre>
+                </div>
+            </div>
+            `;
                 previewDiv.style.display = 'block';
             } else {
                 previewDiv.style.display = 'none';
@@ -623,7 +787,7 @@
             const PADDING = '  ';
             const reg = /(>)(<)(\/*)/g;
             xml = xml.replace(reg, '$1\r\n$2$3');
-            
+
             let pad = 0;
             return xml.split('\r\n').map(line => {
                 let indent = 0;
@@ -638,7 +802,7 @@
                 } else {
                     indent = 0;
                 }
-                
+
                 const padding = PADDING.repeat(pad);
                 pad += indent;
                 return padding + line;
@@ -664,7 +828,7 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
+
             showNotification(`📥 ${file.name} downloaded!`, 'success');
         }
 
@@ -682,27 +846,27 @@
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'};
-                color: white;
-                padding: 1rem 1.5rem;
-                border-radius: 10px;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-                z-index: 1000;
-                font-weight: bold;
-                transform: translateX(400px);
-                transition: transform 0.3s ease;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'};
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            font-weight: bold;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
             `;
             notification.textContent = message;
             document.body.appendChild(notification);
-            
+
             // Animate in
             setTimeout(() => {
                 notification.style.transform = 'translateX(0)';
             }, 100);
-            
+
             // Remove after 3 seconds
             setTimeout(() => {
                 notification.style.transform = 'translateX(400px)';
@@ -713,9 +877,12 @@
         }
 
         // Add some interactive features
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Setup file upload functionality
             setupFileUpload();
+
+            // Initialize charts
+            initializeCharts();
 
             // Parallax effect for floating shapes
             window.addEventListener('scroll', () => {
@@ -729,7 +896,7 @@
 
             // Add click animation to CTA button
             const ctaButton = document.querySelector('.cta-button');
-            ctaButton.addEventListener('click', function(e) {
+            ctaButton.addEventListener('click', function (e) {
                 e.preventDefault();
                 this.style.transform = 'scale(0.95)';
                 setTimeout(() => {
@@ -742,4 +909,5 @@
         });
     </script>
 </body>
+
 </html>
