@@ -806,56 +806,44 @@
             });
         }
 
-        // Extract invoice data from XML
+        // Extract invoice data from XML (Italian format)
         function extractInvoiceData(xmlContent) {
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlContent, 'text/xml');
-
-            // Common XML invoice patterns to search for
-            const totalPatterns = [
-                'TotalAmount', 'Total', 'InvoiceTotal', 'GrandTotal', 'Amount',
-                'cbc:TaxExclusiveAmount', 'cbc:TaxInclusiveAmount', 'cbc:PayableAmount'
-            ];
-
-            const vatPatterns = [
-                'VAT', 'TaxAmount', 'VATAmount', 'Tax', 'TotalVAT',
-                'cbc:TaxAmount', 'cac:TaxTotal/cbc:TaxAmount'
-            ];
-
-            const datePatterns = [
-                'InvoiceDate', 'Date', 'IssueDate', 'cbc:IssueDate'
-            ];
 
             let total = 0;
             let vat = 0;
             let date = null;
 
-            // Try to find total amount
-            for (const pattern of totalPatterns) {
-                const elements = xmlDoc.getElementsByTagName(pattern);
-                if (elements.length > 0) {
-                    const value = parseFloat(elements[0].textContent.replace(/[^\d.-]/g, ''));
-                    if (!isNaN(value) && value > 0) {
-                        total = value;
-                        break;
-                    }
+            // Look for Italian XML invoice elements first
+            // ImportoTotaleDocumento for total amount
+            const totalElements = xmlDoc.getElementsByTagName('ImportoTotaleDocumento');
+            if (totalElements.length > 0) {
+                const value = parseFloat(totalElements[0].textContent.replace(/[^\d.-]/g, ''));
+                if (!isNaN(value) && value >= 0) {
+                    total = value;
                 }
             }
 
-            // Try to find VAT amount
-            for (const pattern of vatPatterns) {
-                const elements = xmlDoc.getElementsByTagName(pattern);
-                if (elements.length > 0) {
-                    const value = parseFloat(elements[0].textContent.replace(/[^\d.-]/g, ''));
-                    if (!isNaN(value) && value > 0) {
-                        vat = value;
-                        break;
+            // Imposta for VAT amount - sum all VAT entries
+            const vatElements = xmlDoc.getElementsByTagName('Imposta');
+            if (vatElements.length > 0) {
+                let totalVat = 0;
+                for (let i = 0; i < vatElements.length; i++) {
+                    const value = parseFloat(vatElements[i].textContent.replace(/[^\d.-]/g, ''));
+                    if (!isNaN(value) && value >= 0) {
+                        totalVat += value;
                     }
                 }
+                vat = totalVat;
             }
 
-            // Try to find date
-            for (const pattern of datePatterns) {
+            // Look for Italian date patterns
+            const italianDatePatterns = [
+                'Data', 'DataDocumento', 'DataEmissione'
+            ];
+
+            for (const pattern of italianDatePatterns) {
                 const elements = xmlDoc.getElementsByTagName(pattern);
                 if (elements.length > 0) {
                     const dateStr = elements[0].textContent;
@@ -866,6 +854,65 @@
                             month: dateMatch[2]
                         };
                         break;
+                    }
+                }
+            }
+
+            // Fallback to common patterns if Italian elements not found
+            if (total === 0) {
+                const fallbackTotalPatterns = [
+                    'TotalAmount', 'Total', 'InvoiceTotal', 'GrandTotal', 'Amount',
+                    'cbc:TaxExclusiveAmount', 'cbc:TaxInclusiveAmount', 'cbc:PayableAmount'
+                ];
+
+                for (const pattern of fallbackTotalPatterns) {
+                    const elements = xmlDoc.getElementsByTagName(pattern);
+                    if (elements.length > 0) {
+                        const value = parseFloat(elements[0].textContent.replace(/[^\d.-]/g, ''));
+                        if (!isNaN(value) && value > 0) {
+                            total = value;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (vat === 0) {
+                const fallbackVatPatterns = [
+                    'VAT', 'TaxAmount', 'VATAmount', 'Tax', 'TotalVAT',
+                    'cbc:TaxAmount', 'cac:TaxTotal/cbc:TaxAmount'
+                ];
+
+                for (const pattern of fallbackVatPatterns) {
+                    const elements = xmlDoc.getElementsByTagName(pattern);
+                    if (elements.length > 0) {
+                        const value = parseFloat(elements[0].textContent.replace(/[^\d.-]/g, ''));
+                        if (!isNaN(value) && value > 0) {
+                            vat = value;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Fallback date patterns
+            if (!date) {
+                const fallbackDatePatterns = [
+                    'InvoiceDate', 'Date', 'IssueDate', 'cbc:IssueDate'
+                ];
+
+                for (const pattern of fallbackDatePatterns) {
+                    const elements = xmlDoc.getElementsByTagName(pattern);
+                    if (elements.length > 0) {
+                        const dateStr = elements[0].textContent;
+                        const dateMatch = dateStr.match(/(\d{4})-?(\d{2})-?(\d{2})/);
+                        if (dateMatch) {
+                            date = {
+                                year: dateMatch[1],
+                                month: dateMatch[2]
+                            };
+                            break;
+                        }
                     }
                 }
             }
@@ -1317,11 +1364,18 @@
 
         // Add some interactive features
         document.addEventListener('DOMContentLoaded', function () {
+            // Initialize monthly data structure
+            initializeMonthlyData();
+
             // Setup file upload functionality
             setupFileUpload();
 
             // Initialize charts
             initializeCharts();
+
+            // Set default month to current month
+            const currentMonth = new Date().getMonth() + 1;
+            document.getElementById('monthSelect').value = currentMonth.toString().padStart(2, '0');
 
             // Parallax effect for floating shapes
             window.addEventListener('scroll', () => {
@@ -1335,16 +1389,18 @@
 
             // Add click animation to CTA button
             const ctaButton = document.querySelector('.cta-button');
-            ctaButton.addEventListener('click', function (e) {
-                e.preventDefault();
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    this.style.transform = 'translateY(-2px)';
-                    document.querySelector('#features').scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }, 150);
-            });
+            if (ctaButton) {
+                ctaButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-2px)';
+                        document.querySelector('#features').scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }, 150);
+                });
+            }
         });
     </script>
 </body>
