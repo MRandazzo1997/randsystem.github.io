@@ -496,6 +496,18 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
     </style>
 </head>
 
@@ -508,14 +520,11 @@
 
     <header>
         <nav class="container">
-            <div class="logo">Your Brand</div>
+            <div class="logo">RandSystem</div>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#charts">Charts</a></li>
                 <li><a href="#xml-manager">XML Manager</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#charts">Charts</a></li>
             </ul>
         </nav>
     </header>
@@ -523,113 +532,9 @@
     <main>
         <section class="hero">
             <div class="container">
-                <h1>Welcome to Your GitHub Pages Site</h1>
-                <p>Build amazing web experiences with modern design and functionality</p>
-                <a href="#features" class="cta-button">Explore Features</a>
-            </div>
-        </section>
-
-        <section class="content" id="charts"
-            style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%); border-radius: 0;">
-            <div class="container">
-                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333;">Interactive Charts
-                </h2>
-
-                <div class="chart-controls">
-                    <button class="chart-button active" onclick="switchDataset('sales')">Sales Data</button>
-                    <button class="chart-button" onclick="switchDataset('growth')">Growth Metrics</button>
-                    <button class="chart-button" onclick="switchDataset('performance')">Performance</button>
-                    <button class="chart-button" onclick="animateCharts()">🎯 Animate</button>
-                </div>
-
-                <div class="chart-grid">
-                    <div class="chart-container">
-                        <div class="chart-title">Revenue Trends</div>
-                        <canvas id="lineChart" width="400" height="300"></canvas>
-                    </div>
-
-                    <div class="chart-container">
-                        <div class="chart-title">Market Distribution</div>
-                        <canvas id="pieChart" width="400" height="300"></canvas>
-                    </div>
-
-                    <div class="chart-container">
-                        <div class="chart-title">Monthly Performance</div>
-                        <canvas id="barChart" width="400" height="300"></canvas>
-                    </div>
-
-                    <div class="chart-container">
-                        <div class="chart-title">Growth Analytics</div>
-                        <canvas id="doughnutChart" width="400" height="300"></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="content" id="charts"
-            style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%); border-radius: 0;">
-            <div class="container">
-                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333;">Data Visualization
-                </h2>
-                <p style="text-align: center; margin-bottom: 2rem; color: #666; font-size: 1.1rem;">
-                    Interactive charts powered by Chart.js - switch between datasets to explore different data views
-                </p>
-
-                <div class="chart-controls">
-                    <button class="chart-button active" onclick="switchDataset('sales')">📈 Sales Data</button>
-                    <button class="chart-button" onclick="switchDataset('growth')">📊 Growth Metrics</button>
-                    <button class="chart-button" onclick="switchDataset('performance')">⚡ Performance</button>
-                    <button class="chart-button" onclick="animateCharts()">🎯 Animate All</button>
-                </div>
-
-                <div class="chart-grid">
-                    <div class="chart-container">
-                        <div class="chart-title">📈 Trend Analysis</div>
-                        <canvas id="lineChart"></canvas>
-                    </div>
-
-                    <div class="chart-container">
-                        <div class="chart-title">📊 Distribution Overview</div>
-                        <canvas id="pieChart"></canvas>
-                    </div>
-
-                    <div class="chart-container">
-                        <div class="chart-title">📋 Comparative Analysis</div>
-                        <canvas id="barChart"></canvas>
-                    </div>
-
-                    <div class="chart-container">
-                        <div class="chart-title">🎯 Key Metrics</div>
-                        <canvas id="doughnutChart"></canvas>
-                    </div>
-                </div>
-
-                <div
-                    style="margin-top: 3rem; padding: 2rem; background: rgba(255, 255, 255, 0.9); border-radius: 15px; backdrop-filter: blur(10px);">
-                    <h3 style="margin-bottom: 1rem; color: #333;">Chart Features</h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎨</div>
-                            <strong>Beautiful Design</strong>
-                            <p style="font-size: 0.9rem; color: #666;">Modern gradients and smooth animations</p>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📱</div>
-                            <strong>Responsive</strong>
-                            <p style="font-size: 0.9rem; color: #666;">Works perfectly on all devices</p>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</div>
-                            <strong>Interactive</strong>
-                            <p style="font-size: 0.9rem; color: #666;">Click and switch between data sets</p>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔄</div>
-                            <strong>Real-time Updates</strong>
-                            <p style="font-size: 0.9rem; color: #666;">Charts update dynamically</p>
-                        </div>
-                    </div>
-                </div>
+                <h1>Welcome to Your VAT comparison tool</h1>
+                <p>Upload client and supplier invoices to automatically extract totals and VAT for analysis</p>
+                <a href="#xml-manager" class="cta-button">Get Started</a>
             </div>
         </section>
 
@@ -686,9 +591,10 @@
                             <option value="12">December</option>
                         </select>
                         <select id="yearSelect" class="month-select" onchange="calculateVATDifference()">
-                            <option value="2023">2023</option>
-                            <option value="2024" selected>2024</option>
+                            <option value="2024">2024</option>
                             <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
                         </select>
                     </div>
                     <div id="vatResult" class="vat-result">
@@ -724,39 +630,26 @@
             </div>
         </section>
 
-        <section class="content" id="features">
+        <section class="content" id="charts">
             <div class="container">
-                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333;">Features</h2>
+                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333;">Charts</h2>
                 <div class="features">
                     <div class="feature">
                         <div class="feature-icon">🚀</div>
-                        <h3>Fast & Responsive</h3>
-                        <p>Built with modern web technologies for optimal performance across all devices and screen
-                            sizes.</p>
+                        <h3>Charts title</h3>
+                        <p>Display charts here.</p>
                     </div>
                     <div class="feature">
                         <div class="feature-icon">🎨</div>
-                        <h3>Beautiful Design</h3>
-                        <p>Contemporary visual design with smooth animations and interactive elements that engage users.
+                        <h3>Charts title</h3>
+                        <p>Display charts here.
                         </p>
                     </div>
                     <div class="feature">
                         <div class="feature-icon">⚡</div>
-                        <h3>Easy to Deploy</h3>
-                        <p>Simply push to GitHub and your site goes live automatically with GitHub Pages hosting.</p>
+                        <h3>Charts title</h3>
+                        <p>Display charts here.</p>
                     </div>
-                </div>
-
-                <div style="margin-top: 4rem; padding: 2rem; background: #f8f9fa; border-radius: 15px;">
-                    <h3 style="margin-bottom: 1rem; color: #333;">Get Started</h3>
-                    <p style="margin-bottom: 1rem;">Ready to customize this template? Here's what you can do:</p>
-                    <ul style="color: #666; line-height: 2;">
-                        <li>Replace the content with your own text and images</li>
-                        <li>Modify colors and fonts in the CSS section</li>
-                        <li>Add new sections for your specific needs</li>
-                        <li>Connect with JavaScript APIs for dynamic content</li>
-                        <li>Add a contact form or blog functionality</li>
-                    </ul>
                 </div>
             </div>
         </section>
@@ -764,26 +657,12 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 Your Name. Hosted on GitHub Pages.</p>
+            <p>&copy; 2025 RandSystem. Hosted on GitHub Pages.</p>
         </div>
     </footer>
 
     <script>
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Invoice Management System
+        // Global variables
         let clientInvoices = [];
         let supplierInvoices = [];
         let monthlyData = {};
@@ -836,6 +715,7 @@
                     }
                 }
                 vat = totalVat;
+                console.log('XML parsing VAT: ' + vat)
             }
 
             // Look for Italian date patterns
@@ -940,6 +820,8 @@
                 if (date && monthlyData[date.year] && monthlyData[date.year][date.month]) {
                     monthlyData[date.year][date.month].clientTotal += total;
                     monthlyData[date.year][date.month].clientVAT += vat;
+                    console.log('Updating total clients value in ' + date.year + '/' + date.month)
+                    console.log('Total vat value: ' + monthlyData[date.year][date.month].clientVAT)
                 }
             });
 
@@ -952,105 +834,8 @@
                 }
             });
 
-            updateChartData();
             updateStats();
             calculateVATDifference();
-        }
-
-        // Update chart data with invoice information
-        function updateChartData() {
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            const currentYear = document.getElementById('yearSelect').value || '2024';
-
-            const clientTotals = [];
-            const clientVATs = [];
-            const supplierTotals = [];
-            const supplierVATs = [];
-
-            months.forEach((_, index) => {
-                const month = (index + 1).toString().padStart(2, '0');
-                const data = monthlyData[currentYear][month];
-                clientTotals.push(data.clientTotal);
-                clientVATs.push(data.clientVAT);
-                supplierTotals.push(data.supplierTotal);
-                supplierVATs.push(data.supplierVAT);
-            });
-
-            // Update charts with new invoice data
-            const invoiceData = {
-                line: {
-                    labels: months,
-                    datasets: [
-                        {
-                            label: 'Client Invoices (€)',
-                            data: clientTotals,
-                            borderColor: '#28a745',
-                            backgroundColor: 'rgba(40, 167, 69, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        },
-                        {
-                            label: 'Supplier Invoices (€)',
-                            data: supplierTotals,
-                            borderColor: '#dc3545',
-                            backgroundColor: 'rgba(220, 53, 69, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }
-                    ]
-                },
-                bar: {
-                    labels: months,
-                    datasets: [
-                        {
-                            label: 'Client VAT (€)',
-                            data: clientVATs,
-                            backgroundColor: 'rgba(40, 167, 69, 0.8)',
-                            borderColor: '#28a745',
-                            borderWidth: 2
-                        },
-                        {
-                            label: 'Supplier VAT (€)',
-                            data: supplierVATs,
-                            backgroundColor: 'rgba(220, 53, 69, 0.8)',
-                            borderColor: '#dc3545',
-                            borderWidth: 2
-                        }
-                    ]
-                },
-                pie: {
-                    labels: ['Client Total', 'Supplier Total'],
-                    datasets: [{
-                        data: [
-                            clientTotals.reduce((a, b) => a + b, 0),
-                            supplierTotals.reduce((a, b) => a + b, 0)
-                        ],
-                        backgroundColor: ['#28a745', '#dc3545'],
-                        borderWidth: 2,
-                        borderColor: '#fff'
-                    }]
-                },
-                doughnut: {
-                    labels: ['Client VAT', 'Supplier VAT'],
-                    datasets: [{
-                        data: [
-                            clientVATs.reduce((a, b) => a + b, 0),
-                            supplierVATs.reduce((a, b) => a + b, 0)
-                        ],
-                        backgroundColor: ['#28a745', '#dc3545'],
-                        borderWidth: 3,
-                        borderColor: '#fff'
-                    }]
-                }
-            };
-
-            // Update existing charts
-            Object.keys(charts).forEach(chartType => {
-                if (charts[chartType] && invoiceData[chartType]) {
-                    charts[chartType].data = invoiceData[chartType];
-                    charts[chartType].update('active');
-                }
-            });
         }
 
         // Update statistics display
@@ -1089,6 +874,7 @@
 
             const data = monthlyData[year][month];
             const vatDifference = data.clientVAT - data.supplierVAT;
+            console.log('Client VAT: ' + data.clientVAT)
             const monthName = document.getElementById('monthSelect').options[document.getElementById('monthSelect').selectedIndex].text;
 
             let resultText = '';
@@ -1115,57 +901,73 @@
             resultDiv.style.background = color;
         }
 
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
         // File upload functionality
         function setupFileUpload() {
-            const uploadArea = document.querySelector('.upload-area');
-            const fileInput = document.getElementById('xmlFileInput');
-            const filesList = document.getElementById('filesList');
+            console.log('Setting up file upload functionality...');
 
-            // Drag and drop events
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.classList.add('dragover');
+            const clientFileInput = document.getElementById('clientFileInput');
+            const supplierFileInput = document.getElementById('supplierFileInput');
+            const clientUploadBox = document.querySelector('.upload-box.client');
+            const supplierUploadBox = document.querySelector('.upload-box.supplier');
+
+            if (!clientFileInput || !supplierFileInput) {
+                console.error('File input elements not found');
+                return;
+            }
+
+            // Setup client file input
+            clientFileInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                handleFiles(files, 'client');
+                e.target.value = ''; // Reset input
             });
 
-            uploadArea.addEventListener('dragleave', (e) => {
-                e.preventDefault();
-                uploadArea.classList.remove('dragover');
+            // Setup supplier file input
+            supplierFileInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                handleFiles(files, 'supplier');
+                e.target.value = ''; // Reset input
             });
 
-            uploadArea.addEventListener('drop', (e) => {
+            // Setup drag and drop for client box
+            if (clientUploadBox) {
+                setupDragAndDrop(clientUploadBox, 'client');
+            }
+
+            // Setup drag and drop for supplier box
+            if (supplierUploadBox) {
+                setupDragAndDrop(supplierUploadBox, 'supplier');
+            }
+
+            console.log('File upload setup complete');
+        }
+
+        function setupDragAndDrop(uploadBox, type) {
+            uploadBox.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                uploadArea.classList.remove('dragover');
+                uploadBox.classList.add('dragover');
+            });
+
+            uploadBox.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadBox.classList.remove('dragover');
+            });
+
+            uploadBox.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadBox.classList.remove('dragover');
                 const files = Array.from(e.dataTransfer.files).filter(file => file.name.endsWith('.xml'));
                 if (files.length > 0) {
-                    handleFiles(files);
+                    handleFiles(files, type);
                 } else {
-                    alert('Please upload only XML files');
+                    showNotification('Please upload only XML files', 'error');
                 }
-            });
-
-            // File input change
-            fileInput.addEventListener('change', (e) => {
-                const files = Array.from(e.target.files);
-                handleFiles(files);
-                e.target.value = ''; // Reset input
             });
         }
 
-        function handleFiles(files) {
+        function handleFiles(files, type) {
+            console.log(`Handling ${files.length} files for ${type}`);
+
             files.forEach(file => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -1177,54 +979,85 @@
                         // Check for parsing errors
                         const parseError = xmlDoc.getElementsByTagName('parsererror');
                         if (parseError.length > 0) {
-                            alert(`Invalid XML file: ${file.name}`);
+                            showNotification(`Invalid XML file: ${file.name}`, 'error');
                             return;
                         }
 
-                        // Create file object
-                        const xmlFile = {
+                        // Extract invoice data
+                        const invoiceData = extractInvoiceData(e.target.result);
+
+                        // Create invoice object
+                        const invoice = {
                             id: Date.now() + Math.random(),
                             name: file.name,
                             size: file.size,
                             content: e.target.result,
-                            uploadDate: new Date().toISOString()
+                            uploadDate: new Date().toISOString(),
+                            data: invoiceData,
+                            type: type
                         };
 
-                        // Add to files array
-                        xmlFiles.push(xmlFile);
+                        // Add to appropriate array
+                        if (type === 'client') {
+                            clientInvoices.push(invoice);
+                        } else {
+                            supplierInvoices.push(invoice);
+                        }
+
+                        // Update displays
+                        updateFileCount();
+                        updateMonthlyData();
                         renderFilesList();
 
                         // Show success message
-                        showNotification(`✅ ${file.name} uploaded successfully!`, 'success');
+                        showNotification(`✅ ${file.name} uploaded successfully! Total: €${invoiceData.total.toFixed(2)}, VAT: €${invoiceData.vat.toFixed(2)}`, 'success');
+
+                        console.log(`Invoice processed: ${file.name}`, invoiceData);
                     } catch (error) {
-                        alert(`Error reading ${file.name}: ${error.message}`);
+                        console.error(`Error reading ${file.name}:`, error);
+                        showNotification(`Error reading ${file.name}: ${error.message}`, 'error');
                     }
                 };
                 reader.readAsText(file);
             });
         }
 
+        function updateFileCount() {
+            document.getElementById('clientCount').textContent = `${clientInvoices.length} files uploaded`;
+            document.getElementById('supplierCount').textContent = `${supplierInvoices.length} files uploaded`;
+        }
+
         function renderFilesList() {
             const filesList = document.getElementById('filesList');
+            const allInvoices = [...clientInvoices, ...supplierInvoices];
 
-            if (xmlFiles.length === 0) {
-                filesList.innerHTML = '<p style="color: #666; text-align: center; padding: 2rem;">No XML files uploaded yet</p>';
+            if (allInvoices.length === 0) {
+                filesList.innerHTML = '<p style="color: #666; text-align: center; padding: 2rem;">No invoice files uploaded yet</p>';
                 return;
             }
 
-            filesList.innerHTML = xmlFiles.map(file => `
+            filesList.innerHTML = allInvoices.map(invoice => `
                 <div class="xml-file-item">
                     <div class="file-info">
-                        <div class="file-name">${file.name}</div>
-                        <div class="file-size">${formatFileSize(file.size)} • Uploaded ${formatDate(file.uploadDate)}</div>
+                        <div class="file-name">
+                            <span style="color: ${invoice.type === 'client' ? '#28a745' : '#dc3545'}; margin-right: 0.5rem;">
+                                ${invoice.type === 'client' ? '📄' : '📋'}
+                            </span>
+                            ${invoice.name}
+                        </div>
+                        <div class="file-size">
+                            ${formatFileSize(invoice.size)} • 
+                            €${invoice.data.total.toFixed(2)} (VAT: €${invoice.data.vat.toFixed(2)}) • 
+                            ${formatDate(invoice.uploadDate)}
+                        </div>
                     </div>
                     <div class="file-actions">
-                        <button class="action-button" onclick="previewFile('${file.id}')">Preview</button>
-                        <button class="action-button download" onclick="downloadFile('${file.id}')">Download</button>
-                        <button class="action-button delete" onclick="deleteFile('${file.id}')">Delete</button>
+                        <button class="action-button" onclick="previewFile('${invoice.id}')">Preview</button>
+                        <button class="action-button download" onclick="downloadFile('${invoice.id}')">Download</button>
+                        <button class="action-button delete" onclick="deleteFile('${invoice.id}')">Delete</button>
                     </div>
                 </div>
-                <div id="preview-${file.id}" style="display: none;"></div>
+                <div id="preview-${invoice.id}" style="display: none;"></div>
             `).join('');
         }
 
@@ -1241,19 +1074,19 @@
         }
 
         function previewFile(fileId) {
-            const file = xmlFiles.find(f => f.id == fileId);
+            const allInvoices = [...clientInvoices, ...supplierInvoices];
+            const invoice = allInvoices.find(f => f.id == fileId);
             const previewDiv = document.getElementById(`preview-${fileId}`);
 
             if (previewDiv.style.display === 'none') {
-                // Show preview with syntax highlighting
-                const formattedXml = formatXml(file.content);
+                const formattedXml = formatXml(invoice.content);
                 previewDiv.innerHTML = `
-                    <div class="xml-preview">
-                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
-                            <strong>Preview: ${file.name}</strong>
-                            <button class="action-button" onclick="hidePreview('${fileId}')" style="margin-left: auto;">Hide</button>
+                    <div class="xml-preview" style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <strong>Preview: ${invoice.name}</strong>
+                            <button class="action-button" onclick="hidePreview('${fileId}')">Hide</button>
                         </div>
-                        <div style="max-height: 300px; overflow-y: auto; background: white; padding: 1rem; border-radius: 5px;">
+                        <div style="max-height: 300px; overflow-y: auto; background: white; padding: 1rem; border-radius: 5px; font-family: monospace; font-size: 0.9rem;">
                             <pre><code>${escapeHtml(formattedXml)}</code></pre>
                         </div>
                     </div>
@@ -1269,7 +1102,6 @@
         }
 
         function formatXml(xml) {
-            // Simple XML formatting
             const PADDING = '  ';
             const reg = /(>)(<)(\/*)/g;
             xml = xml.replace(reg, '$1\r\n$2$3');
@@ -1302,30 +1134,39 @@
         }
 
         function downloadFile(fileId) {
-            const file = xmlFiles.find(f => f.id == fileId);
-            if (!file) return;
+            const allInvoices = [...clientInvoices, ...supplierInvoices];
+            const invoice = allInvoices.find(f => f.id == fileId);
+            if (!invoice) return;
 
-            const blob = new Blob([file.content], { type: 'application/xml' });
+            const blob = new Blob([invoice.content], { type: 'application/xml' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = file.name;
+            a.download = invoice.name;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
-            showNotification(`📥 ${file.name} downloaded!`, 'success');
+            showNotification(`📥 ${invoice.name} downloaded!`, 'success');
         }
 
         function deleteFile(fileId) {
-            const file = xmlFiles.find(f => f.id == fileId);
-            if (!file) return;
+            const allInvoices = [...clientInvoices, ...supplierInvoices];
+            const invoice = allInvoices.find(f => f.id == fileId);
+            if (!invoice) return;
 
-            if (confirm(`Are you sure you want to delete "${file.name}"?`)) {
-                xmlFiles = xmlFiles.filter(f => f.id != fileId);
+            if (confirm(`Are you sure you want to delete "${invoice.name}"?`)) {
+                if (invoice.type === 'client') {
+                    clientInvoices = clientInvoices.filter(f => f.id != fileId);
+                } else {
+                    supplierInvoices = supplierInvoices.filter(f => f.id != fileId);
+                }
+
+                updateFileCount();
+                updateMonthlyData();
                 renderFilesList();
-                showNotification(`🗑️ ${file.name} deleted!`, 'info');
+                showNotification(`🗑️ ${invoice.name} deleted!`, 'info');
             }
         }
 
@@ -1344,6 +1185,7 @@
                 font-weight: bold;
                 transform: translateX(400px);
                 transition: transform 0.3s ease;
+                max-width: 300px;
             `;
             notification.textContent = message;
             document.body.appendChild(notification);
@@ -1353,34 +1195,42 @@
                 notification.style.transform = 'translateX(0)';
             }, 100);
 
-            // Remove after 3 seconds
+            // Remove after 4 seconds
             setTimeout(() => {
                 notification.style.transform = 'translateX(400px)';
                 setTimeout(() => {
-                    document.body.removeChild(notification);
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
                 }, 300);
-            }, 3000);
+            }, 4000);
         }
 
-        // Add some interactive features
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Initialize the application
         document.addEventListener('DOMContentLoaded', function () {
             console.log('DOM Content Loaded - Setting up application...');
 
             // Initialize monthly data structure
             initializeMonthlyData();
 
-            // Wait a bit for all elements to be ready, then setup file upload
+            // Setup file upload functionality
             setTimeout(() => {
                 setupFileUpload();
             }, 200);
-
-            // Initialize charts
-            try {
-                initializeCharts();
-                console.log('Charts initialized successfully');
-            } catch (error) {
-                console.error('Error initializing charts:', error);
-            }
 
             // Set default month to current month
             const monthSelect = document.getElementById('monthSelect');
@@ -1388,6 +1238,16 @@
                 const currentMonth = new Date().getMonth() + 1;
                 monthSelect.value = currentMonth.toString().padStart(2, '0');
             }
+
+            // Set default year to current year
+            const yearSelect = document.getElementById('yearSelect');
+            if (yearSelect) {
+                const currentYear = new Date().getFullYear();
+                yearSelect.value = currentYear.toString().padStart(2, '0');
+            }
+
+            // Initial calculation
+            calculateVATDifference();
 
             // Parallax effect for floating shapes
             window.addEventListener('scroll', () => {
