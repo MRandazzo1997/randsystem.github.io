@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My GitHub Pages Site</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js"></script>
     <style>
         * {
             margin: 0;
@@ -1364,27 +1364,41 @@
 
         // Add some interactive features
         document.addEventListener('DOMContentLoaded', function () {
+            console.log('DOM Content Loaded - Setting up application...');
+
             // Initialize monthly data structure
             initializeMonthlyData();
 
-            // Setup file upload functionality
-            setupFileUpload();
+            // Wait a bit for all elements to be ready, then setup file upload
+            setTimeout(() => {
+                setupFileUpload();
+            }, 200);
 
             // Initialize charts
-            initializeCharts();
+            try {
+                initializeCharts();
+                console.log('Charts initialized successfully');
+            } catch (error) {
+                console.error('Error initializing charts:', error);
+            }
 
             // Set default month to current month
-            const currentMonth = new Date().getMonth() + 1;
-            document.getElementById('monthSelect').value = currentMonth.toString().padStart(2, '0');
+            const monthSelect = document.getElementById('monthSelect');
+            if (monthSelect) {
+                const currentMonth = new Date().getMonth() + 1;
+                monthSelect.value = currentMonth.toString().padStart(2, '0');
+            }
 
             // Parallax effect for floating shapes
             window.addEventListener('scroll', () => {
-                const scrolled = window.pageYOffset;
                 const shapes = document.querySelectorAll('.shape');
-                shapes.forEach((shape, index) => {
-                    const speed = 0.5 + (index * 0.1);
-                    shape.style.transform = `translateY(${scrolled * speed}px)`;
-                });
+                if (shapes.length > 0) {
+                    const scrolled = window.pageYOffset;
+                    shapes.forEach((shape, index) => {
+                        const speed = 0.5 + (index * 0.1);
+                        shape.style.transform = `translateY(${scrolled * speed}px)`;
+                    });
+                }
             });
 
             // Add click animation to CTA button
@@ -1395,12 +1409,17 @@
                     this.style.transform = 'scale(0.95)';
                     setTimeout(() => {
                         this.style.transform = 'translateY(-2px)';
-                        document.querySelector('#features').scrollIntoView({
-                            behavior: 'smooth'
-                        });
+                        const featuresSection = document.querySelector('#features');
+                        if (featuresSection) {
+                            featuresSection.scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }
                     }, 150);
                 });
             }
+
+            console.log('Application setup complete');
         });
     </script>
 </body>
