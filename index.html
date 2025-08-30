@@ -222,26 +222,115 @@
             animation-delay: 4s;
         }
 
-        .upload-area {
+        .upload-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .upload-box {
             border: 3px dashed #667eea;
             border-radius: 15px;
-            padding: 3rem;
+            padding: 2rem;
             text-align: center;
             background: #f8f9fa;
-            margin: 2rem 0;
             transition: all 0.3s ease;
             cursor: pointer;
         }
 
-        .upload-area:hover,
-        .upload-area.dragover {
-            border-color: #764ba2;
-            background: #e9ecef;
+        .upload-box.client {
+            border-color: #28a745;
+        }
+
+        .upload-box.supplier {
+            border-color: #dc3545;
+        }
+
+        .upload-box:hover,
+        .upload-box.dragover {
             transform: scale(1.02);
         }
 
-        .upload-area.dragover {
-            background: #e3f2fd;
+        .upload-box.client:hover,
+        .upload-box.client.dragover {
+            border-color: #20c997;
+            background: #e8f5e8;
+        }
+
+        .upload-box.supplier:hover,
+        .upload-box.supplier.dragover {
+            border-color: #fd7e14;
+            background: #ffe8e8;
+        }
+
+        .vat-calculator {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .month-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            justify-content: center;
+        }
+
+        .month-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            background: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .vat-result {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .invoice-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .upload-section {
+                grid-template-columns: 1fr;
+            }
         }
 
         .file-input {
@@ -547,21 +636,89 @@
         <section class="content" id="xml-manager"
             style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 0;">
             <div class="container">
-                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333;">XML File Manager
+                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333;">Invoice Manager
                 </h2>
+                <p style="text-align: center; margin-bottom: 2rem; color: #666;">
+                    Upload client and supplier invoices to automatically extract totals and VAT for analysis
+                </p>
 
-                <div class="upload-area" onclick="document.getElementById('xmlFileInput').click()">
-                    <div style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;">📁</div>
-                    <h3 style="margin-bottom: 1rem; color: #333;">Upload XML Files</h3>
-                    <p style="color: #666; margin-bottom: 1rem;">Click here or drag and drop XML files to upload</p>
-                    <button type="button" class="upload-button">Choose XML Files</button>
-                    <input type="file" id="xmlFileInput" class="file-input" accept=".xml" multiple>
+                <div class="upload-section">
+                    <div class="upload-box client" onclick="document.getElementById('clientFileInput').click()">
+                        <div style="font-size: 3rem; color: #28a745; margin-bottom: 1rem;">📄</div>
+                        <h3 style="margin-bottom: 1rem; color: #28a745;">Client Invoices</h3>
+                        <p style="color: #666; margin-bottom: 1rem;">Upload invoices from your clients</p>
+                        <button type="button" class="upload-button"
+                            style="background: linear-gradient(135deg, #28a745, #20c997);">Choose Client Files</button>
+                        <input type="file" id="clientFileInput" class="file-input" accept=".xml" multiple>
+                        <div id="clientCount" style="margin-top: 1rem; font-weight: bold; color: #28a745;">0 files
+                            uploaded</div>
+                    </div>
+
+                    <div class="upload-box supplier" onclick="document.getElementById('supplierFileInput').click()">
+                        <div style="font-size: 3rem; color: #dc3545; margin-bottom: 1rem;">📋</div>
+                        <h3 style="margin-bottom: 1rem; color: #dc3545;">Supplier Invoices</h3>
+                        <p style="color: #666; margin-bottom: 1rem;">Upload invoices from your suppliers</p>
+                        <button type="button" class="upload-button"
+                            style="background: linear-gradient(135deg, #dc3545, #fd7e14);">Choose Supplier
+                            Files</button>
+                        <input type="file" id="supplierFileInput" class="file-input" accept=".xml" multiple>
+                        <div id="supplierCount" style="margin-top: 1rem; font-weight: bold; color: #dc3545;">0 files
+                            uploaded</div>
+                    </div>
+                </div>
+
+                <div class="vat-calculator">
+                    <h3 style="text-align: center; margin-bottom: 1rem; color: #333;">VAT Analysis</h3>
+                    <div class="month-selector">
+                        <label for="monthSelect" style="font-weight: bold;">Select Month:</label>
+                        <select id="monthSelect" class="month-select" onchange="calculateVATDifference()">
+                            <option value="01">January</option>
+                            <option value="02">February</option>
+                            <option value="03">March</option>
+                            <option value="04">April</option>
+                            <option value="05">May</option>
+                            <option value="06">June</option>
+                            <option value="07">July</option>
+                            <option value="08">August</option>
+                            <option value="09">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                        <select id="yearSelect" class="month-select" onchange="calculateVATDifference()">
+                            <option value="2023">2023</option>
+                            <option value="2024" selected>2024</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+                    <div id="vatResult" class="vat-result">
+                        Select a month to see VAT difference
+                    </div>
+                </div>
+
+                <div class="invoice-stats" id="invoiceStats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalClientInvoices">€0</div>
+                        <div class="stat-label">Total Client Invoices</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalClientVAT">€0</div>
+                        <div class="stat-label">Total Client VAT</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalSupplierInvoices">€0</div>
+                        <div class="stat-label">Total Supplier Invoices</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalSupplierVAT">€0</div>
+                        <div class="stat-label">Total Supplier VAT</div>
+                    </div>
                 </div>
 
                 <div class="xml-files-list">
-                    <h3 style="margin-bottom: 1rem; color: #333;">Saved XML Files</h3>
+                    <h3 style="margin-bottom: 1rem; color: #333;">Invoice Files</h3>
                     <div id="filesList">
-                        <p style="color: #666; text-align: center; padding: 2rem;">No XML files uploaded yet</p>
+                        <p style="color: #666; text-align: center; padding: 2rem;">No invoice files uploaded yet</p>
                     </div>
                 </div>
             </div>
@@ -626,8 +783,290 @@
             });
         });
 
-        // XML File Management System
-        let xmlFiles = []; // Store XML files in memory during session
+        // Invoice Management System
+        let clientInvoices = [];
+        let supplierInvoices = [];
+        let monthlyData = {};
+
+        // Initialize monthly data structure
+        function initializeMonthlyData() {
+            const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+            const years = ['2023', '2024', '2025'];
+
+            years.forEach(year => {
+                monthlyData[year] = {};
+                months.forEach(month => {
+                    monthlyData[year][month] = {
+                        clientTotal: 0,
+                        clientVAT: 0,
+                        supplierTotal: 0,
+                        supplierVAT: 0
+                    };
+                });
+            });
+        }
+
+        // Extract invoice data from XML
+        function extractInvoiceData(xmlContent) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlContent, 'text/xml');
+
+            // Common XML invoice patterns to search for
+            const totalPatterns = [
+                'TotalAmount', 'Total', 'InvoiceTotal', 'GrandTotal', 'Amount',
+                'cbc:TaxExclusiveAmount', 'cbc:TaxInclusiveAmount', 'cbc:PayableAmount'
+            ];
+
+            const vatPatterns = [
+                'VAT', 'TaxAmount', 'VATAmount', 'Tax', 'TotalVAT',
+                'cbc:TaxAmount', 'cac:TaxTotal/cbc:TaxAmount'
+            ];
+
+            const datePatterns = [
+                'InvoiceDate', 'Date', 'IssueDate', 'cbc:IssueDate'
+            ];
+
+            let total = 0;
+            let vat = 0;
+            let date = null;
+
+            // Try to find total amount
+            for (const pattern of totalPatterns) {
+                const elements = xmlDoc.getElementsByTagName(pattern);
+                if (elements.length > 0) {
+                    const value = parseFloat(elements[0].textContent.replace(/[^\d.-]/g, ''));
+                    if (!isNaN(value) && value > 0) {
+                        total = value;
+                        break;
+                    }
+                }
+            }
+
+            // Try to find VAT amount
+            for (const pattern of vatPatterns) {
+                const elements = xmlDoc.getElementsByTagName(pattern);
+                if (elements.length > 0) {
+                    const value = parseFloat(elements[0].textContent.replace(/[^\d.-]/g, ''));
+                    if (!isNaN(value) && value > 0) {
+                        vat = value;
+                        break;
+                    }
+                }
+            }
+
+            // Try to find date
+            for (const pattern of datePatterns) {
+                const elements = xmlDoc.getElementsByTagName(pattern);
+                if (elements.length > 0) {
+                    const dateStr = elements[0].textContent;
+                    const dateMatch = dateStr.match(/(\d{4})-?(\d{2})-?(\d{2})/);
+                    if (dateMatch) {
+                        date = {
+                            year: dateMatch[1],
+                            month: dateMatch[2]
+                        };
+                        break;
+                    }
+                }
+            }
+
+            // If no date found, use current date
+            if (!date) {
+                const now = new Date();
+                date = {
+                    year: now.getFullYear().toString(),
+                    month: (now.getMonth() + 1).toString().padStart(2, '0')
+                };
+            }
+
+            return { total, vat, date };
+        }
+
+        // Update monthly aggregations
+        function updateMonthlyData() {
+            // Reset monthly data
+            initializeMonthlyData();
+
+            // Aggregate client invoices
+            clientInvoices.forEach(invoice => {
+                const { total, vat, date } = invoice.data;
+                if (date && monthlyData[date.year] && monthlyData[date.year][date.month]) {
+                    monthlyData[date.year][date.month].clientTotal += total;
+                    monthlyData[date.year][date.month].clientVAT += vat;
+                }
+            });
+
+            // Aggregate supplier invoices
+            supplierInvoices.forEach(invoice => {
+                const { total, vat, date } = invoice.data;
+                if (date && monthlyData[date.year] && monthlyData[date.year][date.month]) {
+                    monthlyData[date.year][date.month].supplierTotal += total;
+                    monthlyData[date.year][date.month].supplierVAT += vat;
+                }
+            });
+
+            updateChartData();
+            updateStats();
+            calculateVATDifference();
+        }
+
+        // Update chart data with invoice information
+        function updateChartData() {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const currentYear = document.getElementById('yearSelect').value || '2024';
+
+            const clientTotals = [];
+            const clientVATs = [];
+            const supplierTotals = [];
+            const supplierVATs = [];
+
+            months.forEach((_, index) => {
+                const month = (index + 1).toString().padStart(2, '0');
+                const data = monthlyData[currentYear][month];
+                clientTotals.push(data.clientTotal);
+                clientVATs.push(data.clientVAT);
+                supplierTotals.push(data.supplierTotal);
+                supplierVATs.push(data.supplierVAT);
+            });
+
+            // Update charts with new invoice data
+            const invoiceData = {
+                line: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Client Invoices (€)',
+                            data: clientTotals,
+                            borderColor: '#28a745',
+                            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Supplier Invoices (€)',
+                            data: supplierTotals,
+                            borderColor: '#dc3545',
+                            backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                bar: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Client VAT (€)',
+                            data: clientVATs,
+                            backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                            borderColor: '#28a745',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Supplier VAT (€)',
+                            data: supplierVATs,
+                            backgroundColor: 'rgba(220, 53, 69, 0.8)',
+                            borderColor: '#dc3545',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                pie: {
+                    labels: ['Client Total', 'Supplier Total'],
+                    datasets: [{
+                        data: [
+                            clientTotals.reduce((a, b) => a + b, 0),
+                            supplierTotals.reduce((a, b) => a + b, 0)
+                        ],
+                        backgroundColor: ['#28a745', '#dc3545'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                doughnut: {
+                    labels: ['Client VAT', 'Supplier VAT'],
+                    datasets: [{
+                        data: [
+                            clientVATs.reduce((a, b) => a + b, 0),
+                            supplierVATs.reduce((a, b) => a + b, 0)
+                        ],
+                        backgroundColor: ['#28a745', '#dc3545'],
+                        borderWidth: 3,
+                        borderColor: '#fff'
+                    }]
+                }
+            };
+
+            // Update existing charts
+            Object.keys(charts).forEach(chartType => {
+                if (charts[chartType] && invoiceData[chartType]) {
+                    charts[chartType].data = invoiceData[chartType];
+                    charts[chartType].update('active');
+                }
+            });
+        }
+
+        // Update statistics display
+        function updateStats() {
+            let totalClientInvoices = 0;
+            let totalClientVAT = 0;
+            let totalSupplierInvoices = 0;
+            let totalSupplierVAT = 0;
+
+            clientInvoices.forEach(invoice => {
+                totalClientInvoices += invoice.data.total;
+                totalClientVAT += invoice.data.vat;
+            });
+
+            supplierInvoices.forEach(invoice => {
+                totalSupplierInvoices += invoice.data.total;
+                totalSupplierVAT += invoice.data.vat;
+            });
+
+            document.getElementById('totalClientInvoices').textContent = `€${totalClientInvoices.toFixed(2)}`;
+            document.getElementById('totalClientVAT').textContent = `€${totalClientVAT.toFixed(2)}`;
+            document.getElementById('totalSupplierInvoices').textContent = `€${totalSupplierInvoices.toFixed(2)}`;
+            document.getElementById('totalSupplierVAT').textContent = `€${totalSupplierVAT.toFixed(2)}`;
+        }
+
+        // Calculate VAT difference for selected month
+        function calculateVATDifference() {
+            const month = document.getElementById('monthSelect').value;
+            const year = document.getElementById('yearSelect').value;
+            const resultDiv = document.getElementById('vatResult');
+
+            if (!monthlyData[year] || !monthlyData[year][month]) {
+                resultDiv.innerHTML = 'No data available for selected period';
+                return;
+            }
+
+            const data = monthlyData[year][month];
+            const vatDifference = data.clientVAT - data.supplierVAT;
+            const monthName = document.getElementById('monthSelect').options[document.getElementById('monthSelect').selectedIndex].text;
+
+            let resultText = '';
+            let color = '';
+
+            if (vatDifference > 0) {
+                resultText = `VAT to Pay: €${vatDifference.toFixed(2)}`;
+                color = 'linear-gradient(135deg, #dc3545, #fd7e14)';
+            } else if (vatDifference < 0) {
+                resultText = `VAT Refund: €${Math.abs(vatDifference).toFixed(2)}`;
+                color = 'linear-gradient(135deg, #28a745, #20c997)';
+            } else {
+                resultText = `VAT Balanced: €0.00`;
+                color = 'linear-gradient(135deg, #6c757d, #adb5bd)';
+            }
+
+            resultDiv.innerHTML = `
+                <div style="margin-bottom: 0.5rem;">${monthName} ${year}</div>
+                <div>${resultText}</div>
+                <div style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.9;">
+                    Client VAT: €${data.clientVAT.toFixed(2)} | Supplier VAT: €${data.supplierVAT.toFixed(2)}
+                </div>
+            `;
+            resultDiv.style.background = color;
+        }
 
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -727,18 +1166,18 @@
             }
 
             filesList.innerHTML = xmlFiles.map(file => `
-            <div class="xml-file-item">
-                <div class="file-info">
-                    <div class="file-name">${file.name}</div>
-                    <div class="file-size">${formatFileSize(file.size)} • Uploaded ${formatDate(file.uploadDate)}</div>
+                <div class="xml-file-item">
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${formatFileSize(file.size)} • Uploaded ${formatDate(file.uploadDate)}</div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="action-button" onclick="previewFile('${file.id}')">Preview</button>
+                        <button class="action-button download" onclick="downloadFile('${file.id}')">Download</button>
+                        <button class="action-button delete" onclick="deleteFile('${file.id}')">Delete</button>
+                    </div>
                 </div>
-                <div class="file-actions">
-                    <button class="action-button" onclick="previewFile('${file.id}')">Preview</button>
-                    <button class="action-button download" onclick="downloadFile('${file.id}')">Download</button>
-                    <button class="action-button delete" onclick="deleteFile('${file.id}')">Delete</button>
-                </div>
-            </div>
-            <div id="preview-${file.id}" style="display: none;"></div>
+                <div id="preview-${file.id}" style="display: none;"></div>
             `).join('');
         }
 
@@ -762,16 +1201,16 @@
                 // Show preview with syntax highlighting
                 const formattedXml = formatXml(file.content);
                 previewDiv.innerHTML = `
-            <div class="xml-preview">
-                <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
-                    <strong>Preview: ${file.name}</strong>
-                    <button class="action-button" onclick="hidePreview('${fileId}')" style="margin-left: auto;">Hide</button>
-                </div>
-                <div style="max-height: 300px; overflow-y: auto; background: white; padding: 1rem; border-radius: 5px;">
-                    <pre><code>${escapeHtml(formattedXml)}</code></pre>
-                </div>
-            </div>
-            `;
+                    <div class="xml-preview">
+                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
+                            <strong>Preview: ${file.name}</strong>
+                            <button class="action-button" onclick="hidePreview('${fileId}')" style="margin-left: auto;">Hide</button>
+                        </div>
+                        <div style="max-height: 300px; overflow-y: auto; background: white; padding: 1rem; border-radius: 5px;">
+                            <pre><code>${escapeHtml(formattedXml)}</code></pre>
+                        </div>
+                    </div>
+                `;
                 previewDiv.style.display = 'block';
             } else {
                 previewDiv.style.display = 'none';
@@ -846,18 +1285,18 @@
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'};
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            font-weight: bold;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+                font-weight: bold;
+                transform: translateX(400px);
+                transition: transform 0.3s ease;
             `;
             notification.textContent = message;
             document.body.appendChild(notification);
