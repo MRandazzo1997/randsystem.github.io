@@ -27,6 +27,139 @@
             padding: 0 20px;
         }
 
+        /* Authentication Overlay */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .auth-logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .auth-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .auth-input {
+            padding: 1rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .auth-input:focus {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .auth-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .auth-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .auth-error {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .auth-error.show {
+            opacity: 1;
+        }
+
+        .logout-button {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Hide main content when not authenticated */
+        .main-content {
+            display: none;
+        }
+
+        .main-content.authenticated {
+            display: block;
+        }
+
         header {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -53,6 +186,7 @@
             display: flex;
             list-style: none;
             gap: 2rem;
+            align-items: center;
         }
 
         .nav-links a {
@@ -181,6 +315,10 @@
 
             .features {
                 grid-template-columns: 1fr;
+            }
+
+            .auth-container {
+                padding: 2rem;
             }
         }
 
@@ -512,156 +650,326 @@
 </head>
 
 <body>
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
+    <!-- Authentication Overlay -->
+    <div id="authOverlay" class="auth-overlay">
+        <div class="auth-container">
+            <div class="auth-logo">🔐</div>
+            <h2 class="auth-title">Access Required</h2>
+            <p class="auth-subtitle">Please enter your credentials to access the VAT Calculator</p>
+            <form id="authForm" class="auth-form">
+                <input type="text" id="username" class="auth-input" placeholder="Username" required>
+                <input type="password" id="password" class="auth-input" placeholder="Password" required>
+                <button type="submit" class="auth-button">Sign In</button>
+                <div id="authError" class="auth-error">Invalid credentials. Please try again.</div>
+            </form>
+        </div>
     </div>
 
-    <header>
-        <nav class="container">
-            <div class="logo">RandSystem</div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#xml-manager">XML Manager</a></li>
-                <li><a href="#charts">Charts</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <section class="hero">
-            <div class="container">
-                <h1>Welcome to Your VAT comparison tool</h1>
-                <p>Upload client and supplier invoices to automatically extract totals and VAT for analysis</p>
-                <a href="#xml-manager" class="cta-button">Get Started</a>
-            </div>
-        </section>
-
-        <section class="content" id="xml-manager"
-            style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 0;">
-            <div class="container">
-                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333;">Invoice Manager
-                </h2>
-                <p style="text-align: center; margin-bottom: 2rem; color: #666;">
-                    Upload client and supplier invoices to automatically extract totals and VAT for analysis
-                </p>
-
-                <div class="upload-section">
-                    <div class="upload-box client" onclick="document.getElementById('clientFileInput').click()">
-                        <div style="font-size: 3rem; color: #28a745; margin-bottom: 1rem;">📄</div>
-                        <h3 style="margin-bottom: 1rem; color: #28a745;">Client Invoices</h3>
-                        <p style="color: #666; margin-bottom: 1rem;">Upload invoices from your clients</p>
-                        <button type="button" class="upload-button"
-                            style="background: linear-gradient(135deg, #28a745, #20c997);">Choose Client Files</button>
-                        <input type="file" id="clientFileInput" class="file-input" accept=".xml" multiple>
-                        <div id="clientCount" style="margin-top: 1rem; font-weight: bold; color: #28a745;">0 files
-                            uploaded</div>
-                    </div>
-
-                    <div class="upload-box supplier" onclick="document.getElementById('supplierFileInput').click()">
-                        <div style="font-size: 3rem; color: #dc3545; margin-bottom: 1rem;">📋</div>
-                        <h3 style="margin-bottom: 1rem; color: #dc3545;">Supplier Invoices</h3>
-                        <p style="color: #666; margin-bottom: 1rem;">Upload invoices from your suppliers</p>
-                        <button type="button" class="upload-button"
-                            style="background: linear-gradient(135deg, #dc3545, #fd7e14);">Choose Supplier
-                            Files</button>
-                        <input type="file" id="supplierFileInput" class="file-input" accept=".xml" multiple>
-                        <div id="supplierCount" style="margin-top: 1rem; font-weight: bold; color: #dc3545;">0 files
-                            uploaded</div>
-                    </div>
-                </div>
-
-                <div class="vat-calculator">
-                    <h3 style="text-align: center; margin-bottom: 1rem; color: #333;">VAT Analysis</h3>
-                    <div class="month-selector">
-                        <label for="monthSelect" style="font-weight: bold;">Select Month:</label>
-                        <select id="monthSelect" class="month-select" onchange="calculateVATDifference()">
-                            <option value="01">January</option>
-                            <option value="02">February</option>
-                            <option value="03">March</option>
-                            <option value="04">April</option>
-                            <option value="05">May</option>
-                            <option value="06">June</option>
-                            <option value="07">July</option>
-                            <option value="08">August</option>
-                            <option value="09">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
-                        </select>
-                        <select id="yearSelect" class="month-select" onchange="calculateVATDifference()">
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026">2026</option>
-                            <option value="2027">2027</option>
-                        </select>
-                    </div>
-                    <div id="vatResult" class="vat-result">
-                        Select a month to see VAT difference
-                    </div>
-                </div>
-
-                <div class="invoice-stats" id="invoiceStats">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalClientInvoices">€0</div>
-                        <div class="stat-label">Total Client Invoices</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalClientVAT">€0</div>
-                        <div class="stat-label">Total Client VAT</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalSupplierInvoices">€0</div>
-                        <div class="stat-label">Total Supplier Invoices</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalSupplierVAT">€0</div>
-                        <div class="stat-label">Total Supplier VAT</div>
-                    </div>
-                </div>
-
-                <div class="xml-files-list">
-                    <h3 style="margin-bottom: 1rem; color: #333;">Invoice Files</h3>
-                    <div id="filesList">
-                        <p style="color: #666; text-align: center; padding: 2rem;">No invoice files uploaded yet</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="content" id="charts">
-            <div class="container">
-                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333;">Charts</h2>
-                <div class="features">
-                    <div class="feature">
-                        <div class="feature-icon">🚀</div>
-                        <h3>Charts title</h3>
-                        <p>Display charts here.</p>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon">🎨</div>
-                        <h3>Charts title</h3>
-                        <p>Display charts here.
-                        </p>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon">⚡</div>
-                        <h3>Charts title</h3>
-                        <p>Display charts here.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 RandSystem. Hosted on GitHub Pages.</p>
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content">
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
         </div>
-    </footer>
+
+        <header>
+            <nav class="container">
+                <div class="logo">RandSystem</div>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#xml-manager">XML Manager</a></li>
+                    <li><a href="#charts">Charts</a></li>
+                    <li><button id="logoutBtn" class="logout-button">Logout</button></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="container">
+                    <h1>Welcome to Your VAT comparison tool</h1>
+                    <p>Upload client and supplier invoices to automatically extract totals and VAT for analysis</p>
+                    <a href="#xml-manager" class="cta-button">Get Started</a>
+                </div>
+            </section>
+
+            <section class="content" id="xml-manager"
+                style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 0;">
+                <div class="container">
+                    <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333;">Invoice Manager
+                    </h2>
+                    <p style="text-align: center; margin-bottom: 2rem; color: #666;">
+                        Upload client and supplier invoices to automatically extract totals and VAT for analysis
+                    </p>
+
+                    <div class="upload-section">
+                        <div class="upload-box client" onclick="document.getElementById('clientFileInput').click()">
+                            <div style="font-size: 3rem; color: #28a745; margin-bottom: 1rem;">📄</div>
+                            <h3 style="margin-bottom: 1rem; color: #28a745;">Client Invoices</h3>
+                            <p style="color: #666; margin-bottom: 1rem;">Upload invoices from your clients</p>
+                            <button type="button" class="upload-button"
+                                style="background: linear-gradient(135deg, #28a745, #20c997);">Choose Client
+                                Files</button>
+                            <input type="file" id="clientFileInput" class="file-input" accept=".xml" multiple>
+                            <div id="clientCount" style="margin-top: 1rem; font-weight: bold; color: #28a745;">0 files
+                                uploaded</div>
+                        </div>
+
+                        <div class="upload-box supplier" onclick="document.getElementById('supplierFileInput').click()">
+                            <div style="font-size: 3rem; color: #dc3545; margin-bottom: 1rem;">📋</div>
+                            <h3 style="margin-bottom: 1rem; color: #dc3545;">Supplier Invoices</h3>
+                            <p style="color: #666; margin-bottom: 1rem;">Upload invoices from your suppliers</p>
+                            <button type="button" class="upload-button"
+                                style="background: linear-gradient(135deg, #dc3545, #fd7e14);">Choose Supplier
+                                Files</button>
+                            <input type="file" id="supplierFileInput" class="file-input" accept=".xml" multiple>
+                            <div id="supplierCount" style="margin-top: 1rem; font-weight: bold; color: #dc3545;">0 files
+                                uploaded</div>
+                        </div>
+                    </div>
+
+                    <div class="vat-calculator">
+                        <h3 style="text-align: center; margin-bottom: 1rem; color: #333;">VAT Analysis</h3>
+                        <div class="month-selector">
+                            <label for="monthSelect" style="font-weight: bold;">Select Month:</label>
+                            <select id="monthSelect" class="month-select" onchange="calculateVATDifference()">
+                                <option value="01">January</option>
+                                <option value="02">February</option>
+                                <option value="03">March</option>
+                                <option value="04">April</option>
+                                <option value="05">May</option>
+                                <option value="06">June</option>
+                                <option value="07">July</option>
+                                <option value="08">August</option>
+                                <option value="09">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                            <select id="yearSelect" class="month-select" onchange="calculateVATDifference()">
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                                <option value="2027">2027</option>
+                            </select>
+                        </div>
+                        <div id="vatResult" class="vat-result">
+                            Select a month to see VAT difference
+                        </div>
+                    </div>
+
+                    <div class="invoice-stats" id="invoiceStats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalClientInvoices">€0</div>
+                            <div class="stat-label">Total Client Invoices</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalClientVAT">€0</div>
+                            <div class="stat-label">Total Client VAT</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalSupplierInvoices">€0</div>
+                            <div class="stat-label">Total Supplier Invoices</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalSupplierVAT">€0</div>
+                            <div class="stat-label">Total Supplier VAT</div>
+                        </div>
+                    </div>
+
+                    <div class="xml-files-list">
+                        <h3 style="margin-bottom: 1rem; color: #333;">Invoice Files</h3>
+                        <div id="filesList">
+                            <p style="color: #666; text-align: center; padding: 2rem;">No invoice files uploaded yet</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content" id="charts">
+                <div class="container">
+                    <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem; color: #333;">Charts</h2>
+                    <div class="features">
+                        <div class="feature">
+                            <div class="feature-icon">🚀</div>
+                            <h3>Charts title</h3>
+                            <p>Display charts here.</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🎨</div>
+                            <h3>Charts title</h3>
+                            <p>Display charts here.
+                            </p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">⚡</div>
+                            <h3>Charts title</h3>
+                            <p>Display charts here.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container">
+                <p>&copy; 2025 RandSystem. Hosted on GitHub Pages.</p>
+            </div>
+        </footer>
+    </div>
 
     <script>
+        // Authentication Configuration
+        const AUTH_CONFIG = {
+            // You can change these credentials
+            validCredentials: [
+                { username: 'admin', password: 'vatcalc2025' },
+                { username: 'user', password: 'invoice123' }
+            ],
+            sessionDuration: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+            maxLoginAttempts: 5,
+            lockoutDuration: 15 * 60 * 1000 // 15 minutes in milliseconds
+        };
+
+        // Authentication state
+        let authState = {
+            isAuthenticated: false,
+            loginAttempts: 0,
+            lockedUntil: null
+        };
+
+        // Check authentication on page load
+        function checkAuthentication() {
+            const authData = JSON.parse(localStorage.getItem('vatCalcAuth') || '{}');
+            const now = Date.now();
+
+            // Check if user is locked out
+            if (authData.lockedUntil && now < authData.lockedUntil) {
+                const remainingTime = Math.ceil((authData.lockedUntil - now) / 60000);
+                showAuthError(`Account locked. Try again in ${remainingTime} minutes.`);
+                return false;
+            }
+
+            // Check if session is valid
+            if (authData.sessionExpiry && now < authData.sessionExpiry && authData.isAuthenticated) {
+                authState.isAuthenticated = true;
+                showMainContent();
+                return true;
+            }
+
+            // Clear invalid session
+            localStorage.removeItem('vatCalcAuth');
+            showAuthOverlay();
+            return false;
+        }
+
+        // Handle authentication form submission
+        function handleAuth(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const now = Date.now();
+
+            // Check if locked out
+            const authData = JSON.parse(localStorage.getItem('vatCalcAuth') || '{}');
+            if (authData.lockedUntil && now < authData.lockedUntil) {
+                const remainingTime = Math.ceil((authData.lockedUntil - now) / 60000);
+                showAuthError(`Account locked. Try again in ${remainingTime} minutes.`);
+                return;
+            }
+
+            // Validate credentials
+            const isValid = AUTH_CONFIG.validCredentials.some(cred =>
+                cred.username === username && cred.password === password
+            );
+
+            if (isValid) {
+                // Successful login
+                authState.isAuthenticated = true;
+                authState.loginAttempts = 0;
+
+                const sessionData = {
+                    isAuthenticated: true,
+                    sessionExpiry: now + AUTH_CONFIG.sessionDuration,
+                    loginTime: now,
+                    username: username
+                };
+
+                localStorage.setItem('vatCalcAuth', JSON.stringify(sessionData));
+                showMainContent();
+                showNotification(`Welcome back, ${username}!`, 'success');
+            } else {
+                // Failed login
+                authState.loginAttempts++;
+
+                if (authState.loginAttempts >= AUTH_CONFIG.maxLoginAttempts) {
+                    // Lock account
+                    const lockData = {
+                        lockedUntil: now + AUTH_CONFIG.lockoutDuration,
+                        loginAttempts: authState.loginAttempts
+                    };
+
+                    localStorage.setItem('vatCalcAuth', JSON.stringify(lockData));
+                    const lockoutMinutes = Math.ceil(AUTH_CONFIG.lockoutDuration / 60000);
+                    showAuthError(`Too many failed attempts. Account locked for ${lockoutMinutes} minutes.`);
+                } else {
+                    const remaining = AUTH_CONFIG.maxLoginAttempts - authState.loginAttempts;
+                    showAuthError(`Invalid credentials. ${remaining} attempts remaining.`);
+                }
+
+                // Clear password field
+                document.getElementById('password').value = '';
+            }
+        }
+
+        // Show authentication overlay
+        function showAuthOverlay() {
+            document.getElementById('authOverlay').style.display = 'flex';
+            document.getElementById('mainContent').classList.remove('authenticated');
+            document.getElementById('username').focus();
+        }
+
+        // Show main content
+        function showMainContent() {
+            document.getElementById('authOverlay').style.display = 'none';
+            document.getElementById('mainContent').classList.add('authenticated');
+        }
+
+        // Show authentication error
+        function showAuthError(message) {
+            const errorElement = document.getElementById('authError');
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+
+            setTimeout(() => {
+                errorElement.classList.remove('show');
+            }, 5000);
+        }
+
+        // Handle logout
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('vatCalcAuth');
+                authState.isAuthenticated = false;
+
+                // Clear all data for security
+                clientInvoices = [];
+                supplierInvoices = [];
+                monthlyData = {};
+                initializeMonthlyData();
+                updateFileCount();
+                updateStats();
+                renderFilesList();
+
+                showAuthOverlay();
+                showNotification('Logged out successfully', 'info');
+            }
+        }
+
+        // ================= ORIGINAL VAT CALCULATOR FUNCTIONALITY =================
+
         // Global variables
         let clientInvoices = [];
         let supplierInvoices = [];
@@ -715,7 +1023,6 @@
                     }
                 }
                 vat = totalVat;
-                console.log('XML parsing VAT: ' + vat)
             }
 
             // Look for Italian date patterns
@@ -820,8 +1127,6 @@
                 if (date && monthlyData[date.year] && monthlyData[date.year][date.month]) {
                     monthlyData[date.year][date.month].clientTotal += total;
                     monthlyData[date.year][date.month].clientVAT += vat;
-                    console.log('Updating total clients value in ' + date.year + '/' + date.month)
-                    console.log('Total vat value: ' + monthlyData[date.year][date.month].clientVAT)
                 }
             });
 
@@ -874,7 +1179,6 @@
 
             const data = monthlyData[year][month];
             const vatDifference = data.clientVAT - data.supplierVAT;
-            console.log('Client VAT: ' + data.clientVAT)
             const monthName = document.getElementById('monthSelect').options[document.getElementById('monthSelect').selectedIndex].text;
 
             let resultText = '';
@@ -1224,6 +1528,24 @@
         document.addEventListener('DOMContentLoaded', function () {
             console.log('DOM Content Loaded - Setting up application...');
 
+            // Initialize authentication
+            const authForm = document.getElementById('authForm');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            if (authForm) {
+                authForm.addEventListener('submit', handleAuth);
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', handleLogout);
+            }
+
+            // Check authentication status
+            if (!checkAuthentication()) {
+                console.log('User not authenticated - showing login');
+                return; // Stop here if not authenticated
+            }
+
             // Initialize monthly data structure
             initializeMonthlyData();
 
@@ -1243,7 +1565,7 @@
             const yearSelect = document.getElementById('yearSelect');
             if (yearSelect) {
                 const currentYear = new Date().getFullYear();
-                yearSelect.value = currentYear.toString().padStart(2, '0');
+                yearSelect.value = currentYear.toString();
             }
 
             // Initial calculation
