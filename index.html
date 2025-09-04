@@ -1151,7 +1151,7 @@
                 showSyncStatus('Loading your data...');
 
                 const snapshot = await db.collection('invoices')
-                    .where('userId', '==', currentUser.uid)
+                    //.where('userId', '==', currentUser.uid)
                     .orderBy('createdAt', 'desc')
                     .get();
 
