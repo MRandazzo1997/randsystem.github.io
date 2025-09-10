@@ -803,10 +803,37 @@
                         </div>
                     </div>
 
-                    <div class="xml-files-list">
+                    <!-- <div class="xml-files-list">
                         <h3 style="margin-bottom: 1rem; color: #333;">Invoice Files</h3>
                         <div id="filesList">
                             <p style="color: #666; text-align: center; padding: 2rem;">No invoice files uploaded yet</p>
+                        </div>
+                    </div> -->
+                    <div class="xml-files-list">
+                        <div class="files-list-header">
+                            <h3 class="files-list-title">Invoice Files</h3>
+                            <div class="files-per-page-selector">
+                                <label for="filesPerPageSelect">Files per page:</label>
+                                <select id="filesPerPageSelect" class="files-per-page-select" onchange="changeFilesPerPage()">
+                                    <option value="5">5</option>
+                                    <option value="10" selected>10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="files-info" id="filesInfo">
+                            No files uploaded yet
+                        </div>
+                        <div id="filesList">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📁</div>
+                                <div class="empty-state-text">No invoice files uploaded yet</div>
+                                <div class="empty-state-subtext">Upload XML files using the boxes above to get started</div>
+                            </div>
+                        </div>
+                        <div class="pagination" id="pagination" style="display: none;">
+                            <!-- Pagination controls will be inserted here -->
                         </div>
                     </div>
                 </div>
@@ -866,6 +893,10 @@
         let supplierInvoices = [];
         let monthlyData = {};
         let isAuthMode = 'login'; // 'login' or 'register'
+
+        // Pagination variables
+        let currentPage = 1;
+        let filesPerPage = 10;
 
         // ================= AUTHENTICATION FUNCTIONS =================
 
@@ -1209,6 +1240,150 @@
             } catch (error) {
                 console.error('Error deleting from Firestore:', error);
                 showNotification('Error deleting from cloud', 'error');
+            }
+        }
+
+        // ================= PAGINATION FUNCTIONS =================
+
+        function getTotalPages() {
+            const allInvoices = [...clientInvoices, ...supplierInvoices];
+            return Math.ceil(allInvoices.length / filesPerPage);
+        }
+
+        function getCurrentPageInvoices() {
+            const allInvoices = [...clientInvoices, ...supplierInvoices];
+            const startIndex = (currentPage - 1) * filesPerPage;
+            const endIndex = startIndex + filesPerPage;
+            return allInvoices.slice(startIndex, endIndex);
+        }
+
+        function goToPage(page) {
+            const totalPages = getTotalPages();
+            if (page < 1 || page > totalPages) return;
+            
+            currentPage = page;
+            renderFilesList();
+            updatePagination();
+        }
+
+        function goToFirstPage() {
+            goToPage(1);
+        }
+
+        function goToPreviousPage() {
+            goToPage(currentPage - 1);
+        }
+
+        function goToNextPage() {
+            goToPage(currentPage + 1);
+        }
+
+        function goToLastPage() {
+            const totalPages = getTotalPages();
+            goToPage(totalPages);
+        }
+
+        function changeFilesPerPage() {
+            const select = document.getElementById('filesPerPageSelect');
+            filesPerPage = parseInt(select.value);
+            currentPage = 1; // Reset to first page
+            renderFilesList();
+            updatePagination();
+        }
+
+        function updatePagination() {
+            const pagination = document.getElementById('pagination');
+            const totalPages = getTotalPages();
+            const allInvoices = [...clientInvoices, ...supplierInvoices];
+
+            if (allInvoices.length === 0) {
+                pagination.style.display = 'none';
+                return;
+            }
+
+            pagination.style.display = 'flex';
+
+            // Calculate page range to show
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            // Adjust start page if we're at the end
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+
+            let paginationHTML = '';
+
+            // First page and previous buttons
+            paginationHTML += `
+                <button class="pagination-button ${currentPage === 1 ? 'disabled' : ''}" 
+                        onclick="goToFirstPage()" ${currentPage === 1 ? 'disabled' : ''}>
+                    ⟪
+                </button>
+                <button class="pagination-button ${currentPage === 1 ? 'disabled' : ''}" 
+                        onclick="goToPreviousPage()" ${currentPage === 1 ? 'disabled' : ''}>
+                    ⟨
+                </button>
+            `;
+
+            // Page numbers
+            if (startPage > 1) {
+                paginationHTML += `<button class="pagination-button" onclick="goToPage(1)">1</button>`;
+                if (startPage > 2) {
+                    paginationHTML += `<span class="pagination-info">...</span>`;
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `
+                    <button class="pagination-button ${i === currentPage ? 'active' : ''}" 
+                            onclick="goToPage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    paginationHTML += `<span class="pagination-info">...</span>`;
+                }
+                paginationHTML += `<button class="pagination-button" onclick="goToPage(${totalPages})">${totalPages}</button>`;
+            }
+
+            // Next page and last buttons
+            paginationHTML += `
+                <button class="pagination-button ${currentPage === totalPages ? 'disabled' : ''}" 
+                        onclick="goToNextPage()" ${currentPage === totalPages ? 'disabled' : ''}>
+                    ⟩
+                </button>
+                <button class="pagination-button ${currentPage === totalPages ? 'disabled' : ''}" 
+                        onclick="goToLastPage()" ${currentPage === totalPages ? 'disabled' : ''}>
+                    ⟫
+                </button>
+            `;
+
+            // Page info
+            const startItem = (currentPage - 1) * filesPerPage + 1;
+            const endItem = Math.min(currentPage * filesPerPage, allInvoices.length);
+            paginationHTML += `
+                <div class="pagination-info">
+                    ${startItem}-${endItem} of ${allInvoices.length}
+                </div>
+            `;
+
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function updateFilesInfo() {
+            const filesInfo = document.getElementById('filesInfo');
+            const allInvoices = [...clientInvoices, ...supplierInvoices];
+            
+            if (allInvoices.length === 0) {
+                filesInfo.textContent = 'No files uploaded yet';
+            } else {
+                const totalPages = getTotalPages();
+                filesInfo.textContent = `${allInvoices.length} files total • Page ${currentPage} of ${totalPages}`;
             }
         }
 
@@ -1572,14 +1747,36 @@
 
         function renderFilesList() {
             const filesList = document.getElementById('filesList');
-            const allInvoices = [...clientInvoices, ...supplierInvoices];
+            const currentPageInvoices = getCurrentPageInvoices();
 
-            if (allInvoices.length === 0) {
-                filesList.innerHTML = '<p style="color: #666; text-align: center; padding: 2rem;">No invoice files uploaded yet</p>';
+            // Update files info
+            updateFilesInfo();
+
+            if (currentPageInvoices.length === 0) {
+                const allInvoices = [...clientInvoices, ...supplierInvoices];
+                if (allInvoices.length === 0) {
+                    filesList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📁</div>
+                            <div class="empty-state-text">No invoice files uploaded yet</div>
+                            <div class="empty-state-subtext">Upload XML files using the boxes above to get started</div>
+                        </div>
+                    `;
+                } else {
+                    // If we have files but current page is empty (happens when deleting files), go to last page
+                    const totalPages = getTotalPages();
+                    if (currentPage > totalPages && totalPages > 0) {
+                        currentPage = totalPages;
+                        renderFilesList();
+                        return;
+                    }
+                }
+                
+                updatePagination();
                 return;
             }
 
-            filesList.innerHTML = allInvoices.map(invoice => `
+            filesList.innerHTML = currentPageInvoices.map(invoice => `
                 <div class="xml-file-item">
                     <div class="file-info">
                         <div class="file-name">
@@ -1602,6 +1799,8 @@
                 </div>
                 <div id="preview-${invoice.id}" style="display: none;"></div>
             `).join('');
+
+            updatePagination();
         }
 
         function formatFileSize(bytes) {
