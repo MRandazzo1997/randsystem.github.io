@@ -916,6 +916,260 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
+
+        .files-list-header {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    border-left: 4px solid #667eea;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.files-list-title {
+    margin: 0;
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Filter Controls */
+.filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #495057;
+    white-space: nowrap;
+}
+
+.filter-select {
+    padding: 0.5rem 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.filter-select:hover {
+    border-color: #667eea;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.clear-filters-btn {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.clear-filters-btn:hover {
+    background: linear-gradient(135deg, #c82333, #a71e2a);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.clear-filters-btn:active {
+    transform: translateY(0);
+}
+
+.clear-filters-btn::before {
+    content: "×";
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Files Info Container */
+.files-info-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+}
+
+.files-info {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    color: #495057;
+    font-weight: 500;
+    border-left: 4px solid #667eea;
+    flex: 1;
+}
+
+.filter-info {
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+    padding: 0.75rem 1.25rem;
+    border-radius: 20px;
+    border: 1px solid #e1bee7;
+    color: #5e35b1;
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.filter-info:empty {
+    display: none;
+}
+
+/* Active Filter Indicator */
+.filter-select[value]:not([value="all"]) {
+    background: linear-gradient(135deg, #e8f5e8, #f0fff0);
+    border-color: #28a745;
+    color: #155724;
+    font-weight: 600;
+}
+
+/* Enhanced Empty State for Filtered Results */
+.empty-state.filtered {
+    padding: 2rem;
+}
+
+.empty-state.filtered .empty-state-icon {
+    font-size: 3rem;
+    filter: grayscale(1);
+}
+
+.empty-state.filtered .empty-state-text {
+    color: #6c757d;
+}
+
+.empty-state.filtered .empty-state-subtext {
+    margin-top: 1rem;
+}
+
+.empty-state.filtered .empty-state-subtext::after {
+    content: " Try adjusting your filters or uploading more files.";
+    font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .files-list-header {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        text-align: center;
+    }
+    
+    .filter-controls {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .files-per-page-selector {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .files-list-header {
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    .filter-controls {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+    
+    .filter-group {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .filter-select {
+        min-width: 140px;
+    }
+    
+    .clear-filters-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .files-info-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+    
+    .filter-info {
+        text-align: center;
+        border-radius: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-controls {
+        padding: 0.75rem;
+    }
+    
+    .filter-group {
+        flex-direction: column;
+        gap: 0.25rem;
+        align-items: flex-start;
+    }
+    
+    .filter-select {
+        width: 100%;
+        min-width: unset;
+    }
+}
+
+/* Animation for filter changes */
+.xml-files-list {
+    transition: all 0.3s ease;
+}
+
+.xml-files-list.filtering {
+    opacity: 0.7;
+}
+
+/* Enhanced file items for filtered view */
+.xml-file-item.highlight-month {
+    border-left: 4px solid #28a745;
+    background: linear-gradient(135deg, #f8fff8 0%, #e8f5e8 100%);
+}
+
+.xml-file-item.highlight-month:hover {
+    background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%);
+}
     </style>
 </head>
 
@@ -1082,6 +1336,29 @@
                     <div class="xml-files-list">
                         <div class="files-list-header">
                             <h3 class="files-list-title">Invoice Files</h3>
+                            
+                            <!-- Filter Controls -->
+                            <div class="filter-controls">
+                                <div class="filter-group">
+                                    <label for="filterMonth">Month:</label>
+                                    <select id="filterMonth" class="filter-select" onchange="applyMonthFilter()">
+                                        <option value="all">All Months</option>
+                                        <option value="01">January</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="filter-group">
+                                    <label for="filterYear">Year:</label>
+                                    <select id="filterYear" class="filter-select" onchange="applyMonthFilter()">
+                                        <option value="all">All Years</option>
+                                    </select>
+                                </div>
+                                
+                                <button class="clear-filters-btn" onclick="clearFilters()" title="Clear all filters">
+                                    <span>Clear</span>
+                                </button>
+                            </div>
+                            
                             <div class="files-per-page-selector">
                                 <label for="filesPerPageSelect">Files per page:</label>
                                 <select id="filesPerPageSelect" class="files-per-page-select" onchange="changeFilesPerPage()">
@@ -1092,8 +1369,13 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="files-info" id="filesInfo">
-                            No files uploaded yet
+                        <div class="files-info-container">
+                            <div class="files-info" id="filesInfo">
+                                No files uploaded yet
+                            </div>
+                            <div class="filter-info" id="filterInfo">
+                                <!-- Filter status will be displayed here -->
+                            </div>
                         </div>
                         <div id="filesList">
                             <div class="empty-state">
@@ -1167,6 +1449,8 @@
         // Pagination variables
         let currentPage = 1;
         let filesPerPage = 10;
+        let selectedFilterMonth = 'all';
+        let selectedFilterYear = 'all';
 
         // ================= AUTHENTICATION FUNCTIONS =================
 
@@ -1488,6 +1772,8 @@
                 updateFileCount();
                 updateMonthlyData();
                 renderFilesList();
+                updateFilterOptions();
+                updateFilteredStats();
 
             } catch (error) {
                 console.error('Error loading user data:', error);
@@ -1516,15 +1802,15 @@
         // ================= PAGINATION FUNCTIONS =================
 
         function getTotalPages() {
-            const allInvoices = [...clientInvoices, ...supplierInvoices];
-            return Math.ceil(allInvoices.length / filesPerPage);
+            const filteredInvoices = getFilteredInvoices();
+            return Math.ceil(filteredInvoices.length / filesPerPage);
         }
 
         function getCurrentPageInvoices() {
-            const allInvoices = [...clientInvoices, ...supplierInvoices];
+            const filteredInvoices = getFilteredInvoices();
             const startIndex = (currentPage - 1) * filesPerPage;
             const endIndex = startIndex + filesPerPage;
-            return allInvoices.slice(startIndex, endIndex);
+            return filteredInvoices.slice(startIndex, endIndex);
         }
 
         function goToPage(page) {
@@ -1647,14 +1933,155 @@
 
         function updateFilesInfo() {
             const filesInfo = document.getElementById('filesInfo');
-            const allInvoices = [...clientInvoices, ...supplierInvoices];
+            const filteredInvoices = getFilteredInvoices();
             
-            if (allInvoices.length === 0) {
-                filesInfo.textContent = 'No files uploaded yet';
+            if (filteredInvoices.length === 0) {
+                if (selectedFilterMonth === 'all' && selectedFilterYear === 'all') {
+                    filesInfo.textContent = 'No files uploaded yet';
+                } else {
+                    const monthText = selectedFilterMonth === 'all' ? 'All Months' : getMonthName(selectedFilterMonth);
+                    const yearText = selectedFilterYear === 'all' ? 'All Years' : selectedFilterYear;
+                    filesInfo.textContent = `No files found for ${monthText} ${yearText !== 'All Years' ? yearText : ''}`;
+                }
             } else {
                 const totalPages = getTotalPages();
-                filesInfo.textContent = `${allInvoices.length} files total • Page ${currentPage} of ${totalPages}`;
+                const monthText = selectedFilterMonth === 'all' ? '' : ` (${getMonthName(selectedFilterMonth)} ${selectedFilterYear !== 'all' ? selectedFilterYear : ''})`;
+                filesInfo.textContent = `${filteredInvoices.length} files total${monthText} • Page ${currentPage} of ${totalPages}`;
             }
+        }
+
+        // ================= FILTERING FUNCTIONS =================
+
+        function getAvailableMonths() {
+            const allInvoices = [...clientInvoices, ...supplierInvoices];
+            const months = new Set();
+            const years = new Set();
+            
+            allInvoices.forEach(invoice => {
+                if (invoice.data.date) {
+                    months.add(invoice.data.date.month);
+                    years.add(invoice.data.date.year);
+                }
+            });
+            
+            return {
+                months: Array.from(months).sort(),
+                years: Array.from(years).sort()
+            };
+        }
+
+        function getFilteredInvoices() {
+            const allInvoices = [...clientInvoices, ...supplierInvoices];
+            
+            if (selectedFilterMonth === 'all' && selectedFilterYear === 'all') {
+                return allInvoices;
+            }
+            
+            return allInvoices.filter(invoice => {
+                const monthMatch = selectedFilterMonth === 'all' || invoice.data.date.month === selectedFilterMonth;
+                const yearMatch = selectedFilterYear === 'all' || invoice.data.date.year === selectedFilterYear;
+                return monthMatch && yearMatch;
+            });
+        }
+
+        function updateFilterOptions() {
+            const { months, years } = getAvailableMonths();
+            const monthSelect = document.getElementById('filterMonth');
+            const yearSelect = document.getElementById('filterYear');
+            
+            if (!monthSelect || !yearSelect) return;
+            
+            // Update month options
+            const currentMonthValue = monthSelect.value;
+            monthSelect.innerHTML = '<option value="all">All Months</option>';
+            
+            months.forEach(month => {
+                const monthName = getMonthName(month);
+                const option = document.createElement('option');
+                option.value = month;
+                option.textContent = monthName;
+                monthSelect.appendChild(option);
+            });
+            
+            // Restore selection if still valid
+            if (months.includes(currentMonthValue)) {
+                monthSelect.value = currentMonthValue;
+            } else {
+                selectedFilterMonth = 'all';
+                monthSelect.value = 'all';
+            }
+            
+            // Update year options
+            const currentYearValue = yearSelect.value;
+            yearSelect.innerHTML = '<option value="all">All Years</option>';
+            
+            years.forEach(year => {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearSelect.appendChild(option);
+            });
+            
+            // Restore selection if still valid
+            if (years.includes(currentYearValue)) {
+                yearSelect.value = currentYearValue;
+            } else {
+                selectedFilterYear = 'all';
+                yearSelect.value = 'all';
+            }
+        }
+
+        function getMonthName(month) {
+            const months = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            return months[parseInt(month) - 1] || month;
+        }
+
+        function applyMonthFilter() {
+            const monthSelect = document.getElementById('filterMonth');
+            const yearSelect = document.getElementById('filterYear');
+            
+            selectedFilterMonth = monthSelect.value;
+            selectedFilterYear = yearSelect.value;
+            
+            currentPage = 1; // Reset to first page when filtering
+            renderFilesList();
+            updateFilteredStats();
+        }
+
+        function updateFilteredStats() {
+            const filteredInvoices = getFilteredInvoices();
+            const clientFiltered = filteredInvoices.filter(inv => inv.type === 'client');
+            const supplierFiltered = filteredInvoices.filter(inv => inv.type === 'supplier');
+            
+            const filterInfo = document.getElementById('filterInfo');
+            if (filterInfo) {
+                const monthText = selectedFilterMonth === 'all' ? 'All Months' : getMonthName(selectedFilterMonth);
+                const yearText = selectedFilterYear === 'all' ? 'All Years' : selectedFilterYear;
+                
+                if (selectedFilterMonth === 'all' && selectedFilterYear === 'all') {
+                    filterInfo.textContent = `Showing all ${filteredInvoices.length} files`;
+                } else {
+                    filterInfo.textContent = `Showing ${filteredInvoices.length} files for ${monthText} ${yearText !== 'All Years' ? yearText : ''}`;
+                }
+            }
+        }
+
+        function clearFilters() {
+            selectedFilterMonth = 'all';
+            selectedFilterYear = 'all';
+            
+            const monthSelect = document.getElementById('filterMonth');
+            const yearSelect = document.getElementById('filterYear');
+            
+            if (monthSelect) monthSelect.value = 'all';
+            if (yearSelect) yearSelect.value = 'all';
+            
+            currentPage = 1;
+            renderFilesList();
+            updateFilteredStats();
         }
 
         // ================= VAT CALCULATOR FUNCTIONALITY =================
@@ -1990,6 +2417,8 @@
                     updateFileCount();
                     updateMonthlyData();
                     renderFilesList();
+                    updateFilterOptions();
+                    updateFilteredStats();
 
                     // Show success message
                     showNotification(`✅ ${file.name} uploaded successfully! Total: €${invoiceData.total.toFixed(2)}, VAT: €${invoiceData.vat.toFixed(2)}`, 'success');
@@ -2182,6 +2611,8 @@
                 updateFileCount();
                 updateMonthlyData();
                 renderFilesList();
+                updateFilterOptions();
+                updateFilteredStats();
                 showNotification(`🗑️ ${invoice.name} deleted!`, 'info');
             }
         }
